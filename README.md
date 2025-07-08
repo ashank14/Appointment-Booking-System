@@ -30,7 +30,7 @@ A full-stack appointment booking platform with user, provider, and admin roles. 
 ### Running with Docker Compose
 1. Clone the repository:
    ```sh
-   git clone <your-repo-url>
+   git clone https://github.com/ashank14/Appointment-Booking-System.git
    cd Appointment-Booking-System
    ```
 2. Start all services:
@@ -94,8 +94,3 @@ A full-stack appointment booking platform with user, provider, and admin roles. 
 - `docker-compose.yml` - Multi-service orchestration
 - `smart-appointment-backend.postman_collection.json` - Postman API collection
 
-## Contributing
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-[MIT](LICENSE)
