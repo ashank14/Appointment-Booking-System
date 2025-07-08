@@ -1,0 +1,118 @@
+{
+  "info": {
+    "_postman_id": "smart-appointment-backend-collection",
+    "name": "Smart Appointment Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for Smart Appointment Booking System backend API."
+  },
+  "item": [
+    {
+      "name": "User Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"password\",\n  \"role\": \"USER\"\n}"
+        },
+        "url": { "raw": "http://localhost:8080/user/register", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["user", "register"] }
+      }
+    },
+    {
+      "name": "User Verify OTP",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/user/verify?username=testuser&otp=123456",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["user", "verify"],
+          "query": [
+            { "key": "username", "value": "testuser" },
+            { "key": "otp", "value": "123456" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "User Signin",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password\"\n}"
+        },
+        "url": { "raw": "http://localhost:8080/user/signin", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["user", "signin"] }
+      }
+    },
+    {
+      "name": "Create Slot (Provider)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"Consultation\",\n  \"status\": \"AVAILABLE\",\n  \"startTime\": \"2030-01-01T11:00:00\",\n  \"endTime\": \"2030-01-01T11:30:00\"\n}"
+        },
+        "url": { "raw": "http://localhost:8080/slots/addSlot", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["slots", "addSlot"] }
+      }
+    },
+    {
+      "name": "Get All Slots",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/slots/getAllSlots", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["slots", "getAllSlots"] }
+      }
+    },
+    {
+      "name": "Book Appointment (User)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/appointments/createAppointment/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["appointments", "createAppointment", "1"] }
+      }
+    },
+    {
+      "name": "Get User Appointments",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/appointments/getUserAppointments", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["appointments", "getUserAppointments"] }
+      }
+    },
+    {
+      "name": "Cancel Appointment (User)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/appointments/cancel/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["appointments", "cancel", "1"] }
+      }
+    },
+    {
+      "name": "Get Slot By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/slots/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["slots", "1"] }
+      }
+    },
+    {
+      "name": "Get My Slots (Provider)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:8080/slots/getMySlots", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["slots", "getMySlots"] }
+      }
+    }
+  ]
+}
