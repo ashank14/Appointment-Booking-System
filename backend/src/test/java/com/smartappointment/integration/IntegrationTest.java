@@ -54,6 +54,9 @@ public class IntegrationTest {
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
+        registry.add("app.minSlotDurationMinutes", () -> "30");
+        registry.add("app.maxSlotDurationMinutes", () -> "120");
+        registry.add("app.maxBookingsPerDay", () -> "5");
     }
 
     @Autowired
