@@ -31,6 +31,7 @@ jobs:
 
       - name: Start Docker Compose services
         run: |
+          set -x
           docker compose -f backend/docker-compose.yml up -d
           docker ps
 
@@ -41,7 +42,9 @@ jobs:
         run: chmod +x backend/mvnw
 
       - name: Run tests
-        run: ./backend/mvnw -f backend/pom.xml clean verify
+        run: |
+          set -x
+          ./backend/mvnw -f backend/pom.xml clean verify
 
       - name: Stop Docker Compose services
         if: always()
