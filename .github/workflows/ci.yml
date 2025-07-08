@@ -31,18 +31,18 @@ jobs:
 
       - name: Start Docker Compose services
         run: |
-          docker compose up -d
+          docker compose -f backend/docker-compose.yml up -d
           docker ps
 
       - name: Wait for services to be healthy
         run: sleep 20
 
       - name: Make Maven wrapper executable
-        run: chmod +x ./mvnw
+        run: chmod +x backend/mvnw
 
       - name: Run tests
-        run: ./mvnw clean verify
+        run: ./backend/mvnw -f backend/pom.xml clean verify
 
       - name: Stop Docker Compose services
         if: always()
-        run: docker compose down
+        run: docker compose -f backend/docker-compose.yml down
