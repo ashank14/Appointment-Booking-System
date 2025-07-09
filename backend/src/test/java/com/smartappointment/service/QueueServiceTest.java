@@ -44,15 +44,19 @@ class QueueServiceTest {
         MockitoAnnotations.openMocks(this);
 
         user = User.builder().id(1L).username("user1").build();
+
+        // Set times safely far in the future to avoid timezone problems
+        LocalDateTime futureStartTime = LocalDateTime.now().plusDays(1);
+        LocalDateTime futureEndTime = futureStartTime.plusHours(1);
+
         slot = new Slot();
         slot.setId(100L);
-        slot.setStartTime(LocalDateTime.now().plusHours(2));
-        slot.setEndTime(LocalDateTime.now().plusHours(3));
+        slot.setStartTime(futureStartTime);
+        slot.setEndTime(futureEndTime);
         slot.setStatus(SlotStatus.BOOKED);
 
         when(redisTemplate.opsForList()).thenReturn(listOperations);
     }
-
     @Test
     void testJoinQueueSuccess() {
         when(slotRepository.findById(100L)).thenReturn(Optional.of(slot));
@@ -71,8 +75,9 @@ class QueueServiceTest {
         when(appointmentRepository.findBySlotId(100L)).thenReturn(null);
 
         Slot otherSlot = new Slot();
-        otherSlot.setStartTime(LocalDateTime.now().plusHours(2).minusMinutes(30));
-        otherSlot.setEndTime(LocalDateTime.now().plusHours(2).plusMinutes(30));
+        // Set overlapping time with the test slot (which is already +1 day)
+        otherSlot.setStartTime(slot.getStartTime().minusMinutes(30));
+        otherSlot.setEndTime(slot.getStartTime().plusMinutes(30));
 
         Appointment existing = new Appointment();
         existing.setSlot(otherSlot);
@@ -84,6 +89,7 @@ class QueueServiceTest {
 
         assertTrue(ex.getMessage().contains("booked appointment"));
     }
+
 
     @Test
     void testDequeueNextAndBook() {
