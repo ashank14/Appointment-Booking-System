@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class QueueService {
         Slot slot = slotRepository.findById(slotId)
                 .orElseThrow(() -> new RuntimeException("Slot not found"));
 
-        if (slot.getStatus().equals(SlotStatus.AVAILABLE) || LocalDateTime.now().isAfter(slot.getEndTime())) {
+        if (slot.getStatus().equals(SlotStatus.AVAILABLE) || LocalDateTime.now(ZoneId.of("Asia/Kolkata")).isAfter(slot.getEndTime())) {
             throw new RuntimeException("Cannot queue for an available or expired slot");
         }
 
@@ -79,6 +80,7 @@ public class QueueService {
     }
 
     public List<User> getQueue(Long slotId) {
+
         return redisTemplate.opsForList().range(getQueueKey(slotId), 0, -1);
     }
 
@@ -107,6 +109,7 @@ public class QueueService {
 
     public void leaveQueue(Long slotId, User user) {
         String queueKey = "queue:slot:" + slotId;
+
 
         // Check if queue exists
         if (!redisTemplate.hasKey(queueKey)) {

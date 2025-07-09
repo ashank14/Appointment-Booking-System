@@ -224,7 +224,7 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {analyticsData.cancellationRate + "%" ? `${analyticsData.cancellationRate}%` : "--"}
+                 {analyticsData.cancellationRate !== undefined ? `${analyticsData.cancellationRate}%` : "--"}
               </div>
               <p className="text-xs text-muted-foreground">For selected provider</p>
             </CardContent>
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
             <CardContent>
               <div className="grid gap-4">
                 {providerAppointments.map((appointment, index) => (
-                  <div key={appointment.appointmentId || index} className="border rounded-lg p-4 bg-gray-50">
+                  <div key={appointment.appointmentId || index} className="border rounded-lg p-4 bg-purple-500">
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                       <div>
                         <div className="text-sm font-medium text-gray-600">Appointment ID</div>

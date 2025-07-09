@@ -33,6 +33,7 @@ public class QueueController {
 
     @GetMapping("/{slotId}")
     public ResponseEntity<Integer> viewQueue(@PathVariable Long slotId) {
+
         return ResponseEntity.ok(queueService.getQueue(slotId).size());
     }
 

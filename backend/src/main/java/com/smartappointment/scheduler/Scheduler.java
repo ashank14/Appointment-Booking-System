@@ -11,13 +11,16 @@ import com.smartappointment.service.QueueService;
 import com.smartappointment.util.enumerations.AppointmentStatus;
 import com.smartappointment.util.enumerations.SlotStatus;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
+@Slf4j
 @Service
 public class Scheduler {
     @Autowired
@@ -35,10 +38,11 @@ public class Scheduler {
     @Autowired
     private QueueService queueService;
 
+
     @Scheduled(fixedRate = 60000)
     @Transactional
     public void updateExpiredAppointments() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
         List<Appointment> pastAppointments = appointmentRepository.findBySlotEndTimeBeforeAndStatus(now, AppointmentStatus.BOOKED);
 
         for (Appointment appointment : pastAppointments) {
@@ -62,7 +66,7 @@ public class Scheduler {
     @Scheduled(fixedRate = 60000)
     @Transactional
     public void expireOldSlots() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
         System.out.println("scheduler");
         List<Slot> oldSlots = slotRepository.findByEndTimeBeforeAndStatus(now, SlotStatus.AVAILABLE);
         for (Slot s : oldSlots) {
@@ -77,7 +81,7 @@ public class Scheduler {
 
     @Scheduled(fixedRate = 60000)
     public void sendAppointmentReminders() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
         LocalDateTime reminderTime = now.plusMinutes(5);
 
         List<Appointment> upcomingAppointments = appointmentRepository
@@ -87,8 +91,15 @@ public class Scheduler {
                 .filter(appointment -> appointment.getSlot().getStartTime().isAfter(now))
                 .filter(appointment -> appointment.getSlot().getStartTime().isBefore(reminderTime))
                 .toList();
+        log.info("Now: {}", now);
+        log.info("ReminderTime: {}", reminderTime);
+        appointmentRepository.findAll().forEach(app -> {
+            log.info("Appointment ID: {}, Slot Start: {}, Status: {}", app.getId(), app.getSlot().getStartTime(), app.getStatus());
+        });
 
+        log.info("sending reminder");
         for (Appointment appointment : upcomingAppointments) {
+            log.info("sending reminder");
             notificationService.sendAppointmentReminder(appointment);
             kafkaProducerService.sendNotification("Reminder: Appointment with ID: "+ appointment.getId() +" for user: " + appointment.getUser().getUsername() +
                     "starts at"+

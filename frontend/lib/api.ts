@@ -15,7 +15,7 @@ api.interceptors.request.use(
     const token = localStorage.getItem("token")
 
     // Do not attach token to public routes like /signin or /signup
-    if (token && config.url && !config.url.includes("/signin") && !config.url.includes("/signup")) {
+    if (token && config.url && !config.url.includes("/signin") && !config.url.includes("/register")) {
       config.headers.Authorization = `Bearer ${token}`
     }
     return config
